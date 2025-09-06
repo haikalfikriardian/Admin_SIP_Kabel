@@ -1,0 +1,126 @@
+{
+  "project_info": {
+    "project_number": "1063987728042",
+    "project_id": "sip-kabel-ec1d8",
+    "storage_bucket": "sip-kabel-ec1d8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063987728042:android:eadc79bcf190a650088ad3",
+        "android_client_info": {
+          "package_name": "com.example.admin_panel_sipkabel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063987728042-igk3m7sncee0jhtbrvfupol33chg29kf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHuAf2rvo7t_v8SOQp_jhOyLatIDotxIs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063987728042-igk3m7sncee0jhtbrvfupol33chg29kf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1063987728042-edfnkm53njen41duvhccekv1fsvnmk8k.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sipKabellApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063987728042:android:7adc28e4b221b189088ad3",
+        "android_client_info": {
+          "package_name": "com.example.sip_kabell_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063987728042-igk3m7sncee0jhtbrvfupol33chg29kf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHuAf2rvo7t_v8SOQp_jhOyLatIDotxIs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063987728042-igk3m7sncee0jhtbrvfupol33chg29kf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1063987728042-edfnkm53njen41duvhccekv1fsvnmk8k.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sipKabellApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063987728042:android:1a2d313a17651b3a088ad3",
+        "android_client_info": {
+          "package_name": "com.kabelin.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063987728042-9uqk7kf7l5s62a7tp3v8kk83tlm9p9qn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kabelin.app",
+            "certificate_hash": "9d035d8cd79a15b3a864a1f8d1d575d922752e6f"
+          }
+        },
+        {
+          "client_id": "1063987728042-igk3m7sncee0jhtbrvfupol33chg29kf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHuAf2rvo7t_v8SOQp_jhOyLatIDotxIs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063987728042-igk3m7sncee0jhtbrvfupol33chg29kf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1063987728042-edfnkm53njen41duvhccekv1fsvnmk8k.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.sipKabellApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

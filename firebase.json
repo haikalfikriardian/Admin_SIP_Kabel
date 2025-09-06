@@ -1,0 +1,56 @@
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "sip-kabel-ec1d8",
+          "configurations": {
+            "android": "1:1063987728042:android:eadc79bcf190a650088ad3",
+            "ios": "1:1063987728042:ios:17100a6e98b09f57088ad3",
+            "macos": "1:1063987728042:ios:17100a6e98b09f57088ad3",
+            "web": "1:1063987728042:web:60fa30f49aae6745088ad3"
+          }
+        }
+      },
+      "android": {
+        "default": {
+          "projectId": "sip-kabel-ec1d8",
+          "appId": "1:1063987728042:android:eadc79bcf190a650088ad3",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "ios": {
+        "default": {
+          "projectId": "sip-kabel-ec1d8",
+          "appId": "1:1063987728042:ios:17100a6e98b09f57088ad3",
+          "uploadDebugSymbols": false,
+          "fileOutput": "ios/Runner/GoogleService-Info.plist"
+        }
+      },
+      "macos": {
+        "default": {
+          "projectId": "sip-kabel-ec1d8",
+          "appId": "1:1063987728042:ios:17100a6e98b09f57088ad3",
+          "uploadDebugSymbols": false,
+          "fileOutput": "macos/Runner/GoogleService-Info.plist"
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint"
+      ]
+    }
+  ]
+}

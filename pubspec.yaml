@@ -1,0 +1,43 @@
+name: admin_panel_sipkabel
+description: "Admin Panel untuk aplikasi SIPKABEL"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.8.1 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  lucide_icons: ^0.257.0
+
+  # Firebase (versi kompatibel)
+  firebase_core: ^2.27.0
+  firebase_auth: ^4.17.0
+  cloud_firestore: ^4.15.0
+  firebase_storage: ^11.6.0
+  image_picker: ^1.1.1
+  image_picker_web: ^3.0.0
+  file_picker: ^6.1.1
+  intl: ^0.18.1
+  url_launcher: ^6.2.4
+  google_fonts: ^6.1.0
+  data_table_2: ^2.5.8
+  excel: ^4.0.6
+  js: ^0.6.7
+  cloud_functions: ^4.7.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  fl_chart: ^0.64.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/logo_white.png
+    - assets/logo_orange.png
+    - assets/logo.png
