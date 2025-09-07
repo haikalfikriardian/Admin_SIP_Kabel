@@ -1,16 +1,43 @@
-# admin_panel_sipkabel
 
-A new Flutter project.
+# Admin Panel SIPKABEL
+
+This is a Flutter web admin panel for SIPKABEL. It is designed to be run as a web application.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) (ensure it's added to your PATH)
+- Chrome or another supported web browser
 
-A few resources to get you started if this is your first Flutter project:
+### Install Dependencies
+Open a terminal in the project root and run:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```sh
+flutter pub get
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Run the App (Web)
+To start the app in your default browser:
+
+```sh
+flutter run -d chrome
+```
+
+Or, to build for web release:
+
+```sh
+flutter build web
+```
+
+The output will be in the `build/web` directory.
+
+## Project Structure
+- `lib/` — Main application code
+- `web/` — Web entry point and static files
+- `assets/` — Images and other assets
+
+## Notes
+- This project is web-only. Mobile and desktop folders have been removed for a cleaner setup.
+
+---
+For more Flutter documentation, visit the [official docs](https://docs.flutter.dev/).
