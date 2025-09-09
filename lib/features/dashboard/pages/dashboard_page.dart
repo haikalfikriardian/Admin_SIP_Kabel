@@ -1,9 +1,25 @@
-// ignore_for_file: use_build_context_synchronously
 
+
+// ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
+
+// Helper classes for menu structure
+class _MenuSection {
+  final String? title;
+  final List<_MenuItem> items;
+  const _MenuSection({this.title, required this.items});
+}
+
+class _MenuItem {
+  final String title;
+  final IconData icon;
+  final String? route;
+  const _MenuItem(this.title, this.icon, {this.route});
+}
+
 
 /// Field tanggal yang dipakai untuk hitung sales
 const String kDateFieldForSales = 'createdAt';
@@ -15,30 +31,45 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  int _selectedIndex = 0;
 
   // ====== MENU (SIDEBAR) ======
-  final List<String> menuTitles = const [
-    'Dashboard',
-    'Produk',
-    'Banner',
-    'Pesanan',
-    'Pembatalan',
-    'Notifikasi',
-    'Pengguna', // ⬅️ baru
-    'Admin', // ⬅️ baru
-    'Katalog',
-  ];
-  final List<IconData> menuIcons = const [
-    Icons.dashboard,
-    Icons.inventory,
-    Icons.image,
-    Icons.shopping_cart,
-    Icons.cancel,
-    Icons.notifications,
-    Icons.group, // ⬅️ Pengguna
-    Icons.verified_user, // ⬅️ Admin
-    Icons.picture_as_pdf,
+  // Grouped menu structure
+  final List<_MenuSection> menuSections = [
+    _MenuSection(
+      title: null,
+      items: [
+        _MenuItem('Dashboard', Icons.dashboard, route: null),
+      ],
+    ),
+    _MenuSection(
+      title: 'Manajemen Produk',
+      items: [
+        _MenuItem('Produk', Icons.inventory, route: '/products'),
+        _MenuItem('Kategori', Icons.category, route: '/categories'),
+        _MenuItem('Katalog', Icons.picture_as_pdf, route: '/admin-catalogs'),
+      ],
+    ),
+    _MenuSection(
+      title: 'Manajemen Toko',
+      items: [
+        _MenuItem('Banner', Icons.image, route: '/banners'),
+        _MenuItem('Notifikasi', Icons.notifications, route: '/admin-notifications'),
+      ],
+    ),
+    _MenuSection(
+      title: 'Manajemen Pesanan',
+      items: [
+        _MenuItem('Pesanan', Icons.shopping_cart, route: '/orders'),
+        _MenuItem('Pembatalan', Icons.cancel, route: '/order-disputes'),
+      ],
+    ),
+    _MenuSection(
+      title: 'Manajemen Pengguna',
+      items: [
+        _MenuItem('Admin', Icons.verified_user, route: '/admins'),
+        _MenuItem('Pelanggan', Icons.group, route: '/users'),
+      ],
+    ),
   ];
 
   @override
@@ -157,7 +188,7 @@ class _DashboardPageState extends State<DashboardPage> {
         .map((s) {
           double sum = 0;
           for (final d in s.docs) {
-            final data = d.data() as Map<String, dynamic>;
+            final data = d.data();
             if (!_isOmzet(data)) continue;
             sum += _calcOrderTotal(data);
           }
@@ -182,7 +213,7 @@ class _DashboardPageState extends State<DashboardPage> {
         .map((s) {
           double sum = 0;
           for (final d in s.docs) {
-            final data = d.data() as Map<String, dynamic>;
+            final data = d.data();
             if (!_isOmzet(data)) continue;
             sum += _calcOrderTotal(data);
           }
@@ -194,7 +225,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return FirebaseFirestore.instance.collection('orders').snapshots().map((s) {
       double sum = 0;
       for (final d in s.docs) {
-        final data = d.data() as Map<String, dynamic>;
+        final data = d.data();
         if (!_isOmzet(data)) continue;
         sum += _calcOrderTotal(data);
       }
@@ -208,7 +239,7 @@ class _DashboardPageState extends State<DashboardPage> {
       double sum = 0;
       int count = 0;
       for (final d in snap.docs) {
-        final data = d.data() as Map<String, dynamic>;
+        final data = d.data();
         if (!_isOmzet(data)) continue;
         sum += _calcOrderTotal(data);
         count++;
@@ -233,7 +264,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return FirebaseFirestore.instance.collection('orders').snapshots().map((s) {
       double sum = 0;
       for (final d in s.docs) {
-        final data = d.data() as Map<String, dynamic>;
+        final data = d.data();
         final st = (data['status'] ?? '').toString();
         if (st != 'Menunggu Pembayaran') continue;
         sum += _calcOrderTotal(data);
@@ -261,7 +292,7 @@ class _DashboardPageState extends State<DashboardPage> {
           final maxW = _weeksInMonth(now);
           final Map<int, double> m = {for (var i = 1; i <= maxW; i++) i: 0.0};
           for (final doc in snap.docs) {
-            final data = doc.data() as Map<String, dynamic>;
+            final data = doc.data();
             if (!_isOmzet(data)) continue;
             final ts = _tsForSales(data);
             if (ts == null) continue;
@@ -294,7 +325,7 @@ class _DashboardPageState extends State<DashboardPage> {
         .map((snapshot) {
           final Map<int, double> m = {for (var d = 1; d <= days; d++) d: 0.0};
           for (final doc in snapshot.docs) {
-            final data = doc.data() as Map<String, dynamic>;
+            final data = doc.data();
             if (!_isOmzet(data)) continue;
             final ts = _tsForSales(data);
             if (ts == null) continue;
@@ -312,7 +343,7 @@ class _DashboardPageState extends State<DashboardPage> {
     ) {
       final map = <String, double>{}; // 'YYYY-MM' -> total
       for (final doc in snapshot.docs) {
-        final data = doc.data() as Map<String, dynamic>;
+        final data = doc.data();
         if (!_isOmzet(data)) continue;
         final ts = _tsForSales(data);
         if (ts == null) continue;
@@ -340,42 +371,69 @@ class _DashboardPageState extends State<DashboardPage> {
           const SizedBox(height: 40),
           Image.asset('assets/logo.png', height: 90),
           const SizedBox(height: 40),
-          ...List.generate(menuTitles.length, (index) {
-            return ListTile(
-              leading: Icon(menuIcons[index], color: Colors.white),
-              title: Text(
-                menuTitles[index],
-                style: const TextStyle(color: Colors.white),
-              ),
-              selected: _selectedIndex == index,
-              selectedTileColor: Colors.white24,
-              onTap: () {
-                final m = menuTitles[index];
-                if (m == 'Produk') {
-                  Navigator.pushNamed(context, '/products');
-                } else if (m == 'Banner') {
-                  Navigator.pushNamed(context, '/banners');
-                } else if (m == 'Pesanan') {
-                  Navigator.pushNamed(context, '/orders');
-                } else if (m == 'Notifikasi') {
-                  Navigator.pushNamed(context, '/admin-notifications');
-                } else if (m == 'Pengguna') {
-                  // ⬅️ route users
-                  Navigator.pushNamed(context, '/users');
-                } else if (m == 'Admin') {
-                  // ⬅️ route admins
-                  Navigator.pushNamed(context, '/admins');
-                } else if (m == 'Katalog') {
-                  Navigator.pushNamed(context, '/admin-catalogs');
-                } else if (m == 'Pembatalan') {
-                  Navigator.pushNamed(context, '/order-disputes');
-                } else {
-                  setState(() => _selectedIndex = index);
-                }
-              },
-            );
-          }),
-          const Spacer(),
+          Expanded(
+            child: ListView(
+              children: [
+                // Dashboard (single, not collapsible)
+                ...menuSections.first.items.map((item) => ListTile(
+                      leading: Icon(item.icon, color: Colors.white),
+                      title: Text(
+                        item.title,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                      onTap: () {
+                        if (item.route != null) {
+                          Navigator.pushNamed(context, item.route!);
+                        }
+                      },
+                    )),
+                const Divider(color: Colors.white24, height: 1),
+                // Collapsible groups
+                for (final section in menuSections.skip(1)) ...[
+                  Theme(
+                    data: Theme.of(context).copyWith(
+                      dividerColor: Colors.transparent,
+                      unselectedWidgetColor: Colors.white70,
+                      colorScheme: Theme.of(context).colorScheme.copyWith(
+                        onSurface: Colors.white,
+                        primary: Colors.white,
+                      ),
+                    ),
+                    child: ExpansionTile(
+                      tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+                      collapsedIconColor: Colors.white70,
+                      iconColor: Colors.white,
+                      title: Text(
+                        section.title!,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      children: section.items
+                          .map((item) => ListTile(
+                                leading: Icon(item.icon, color: Colors.white),
+                                title: Text(
+                                  item.title,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                onTap: () {
+                                  if (item.route != null) {
+                                    Navigator.pushNamed(context, item.route!);
+                                  }
+                                },
+                              ))
+                          .toList(),
+                    ),
+                  ),
+                  if (section != menuSections.last)
+                    const Divider(color: Colors.white24, height: 1),
+                ],
+              ],
+            ),
+          ),
           const Divider(color: Colors.white70),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.white),
@@ -392,6 +450,7 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
     );
   }
+
 
   // ===================== HEADER =====================
   Widget buildHeader() {
@@ -689,8 +748,7 @@ class _DashboardPageState extends State<DashboardPage> {
           (s) {
             final Map<String, int> m = {};
             for (final d in s.docs) {
-              final st = ((d.data() as Map<String, dynamic>)['status'] ?? '')
-                  .toString();
+              final st = ((d.data())['status'] ?? '').toString();
               if (st.isEmpty) continue;
               m[st] = (m[st] ?? 0) + 1;
             }
