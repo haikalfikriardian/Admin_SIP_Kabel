@@ -526,10 +526,9 @@ class _DashboardPageState extends State<DashboardPage> {
                     style: const TextStyle(fontSize: 12, color: Colors.black45),
                     child: sub,
                   ),
-                ],
-              ],
+                ]],
+              ),
             ),
-          ),
         ],
       ),
     );
@@ -584,7 +583,7 @@ class _DashboardPageState extends State<DashboardPage> {
   // ===================== CHART WIDGETS =====================
   Widget weeklySalesCard() {
     return _chartCard(
-      title: 'Weekly Sales (This Month)',
+      title: 'Penjualan Mingguan Bulan Ini',
       height: 320,
       child: StreamBuilder<Map<int, double>>(
         stream: weeklySalesThisMonth(),
@@ -654,6 +653,14 @@ class _DashboardPageState extends State<DashboardPage> {
                               : '${jt.toStringAsFixed(1)} jt',
                         );
                       }
+                      if (v >= 1000) {
+                        final k = v / 1000;
+                        return Text(
+                          k % 1 == 0
+                              ? '${k.toStringAsFixed(0)} K'
+                              : '${k.toStringAsFixed(1)} K',
+                        );
+                      }
                       return Text(v.toStringAsFixed(0));
                     },
                   ),
@@ -675,8 +682,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget orderStatusPieCard() {
     return _chartCard(
-      title: 'Orders Status',
-      height: 360,
+      title: 'Status Pesanan',
+      height: 340,
       child: StreamBuilder<Map<String, int>>(
         stream: FirebaseFirestore.instance.collection('orders').snapshots().map(
           (s) {
@@ -767,7 +774,7 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  Widget monthlySalesCard() {
+  Widget dailySalesCard() {
     final now = DateTime.now();
     final start = DateTime(now.year, now.month, 1);
     final next = now.month == 12
@@ -776,7 +783,7 @@ class _DashboardPageState extends State<DashboardPage> {
     final days = next.difference(start).inDays;
 
     return _chartCard(
-      title: 'Daily Sales (${_monthName(now.month)})',
+      title: 'Penjualan Harian (${_monthName(now.month)})',
       height: 320,
       child: StreamBuilder<Map<int, double>>(
         stream: dailySalesThisMonth(),
@@ -842,6 +849,14 @@ class _DashboardPageState extends State<DashboardPage> {
                               : '${jt.toStringAsFixed(1)} jt',
                         );
                       }
+                      if (value >= 1000) {
+                        final k = value / 1000;
+                        return Text(
+                          k % 1 == 0
+                              ? '${k.toStringAsFixed(0)} K'
+                              : '${k.toStringAsFixed(1)} K',
+                        );
+                      }
                       return Text(value.toStringAsFixed(0));
                     },
                   ),
@@ -863,7 +878,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget allTimeMonthlySalesCard() {
     return _chartCard(
-      title: 'Total Sales All-Time (By Month)',
+      title: 'Penjualan Bulanan (12 bulan terakhir)',
       height: 320,
       child: StreamBuilder<List<_MonthPoint>>(
         stream: monthlySalesAllTime(),
@@ -935,6 +950,14 @@ class _DashboardPageState extends State<DashboardPage> {
                               : '${jt.toStringAsFixed(1)} jt',
                         );
                       }
+                      if (value >= 1000) {
+                        final k = value / 1000;
+                        return Text(
+                          k % 1 == 0
+                              ? '${k.toStringAsFixed(0)} K'
+                              : '${k.toStringAsFixed(1)} K',
+                        );
+                      }
                       return Text(value.toStringAsFixed(0));
                     },
                   ),
@@ -990,10 +1013,10 @@ class _DashboardPageState extends State<DashboardPage> {
                             child: StreamBuilder<double>(
                               stream: salesThisMonth(),
                               builder: (_, s) => _metricCard(
-                                title: 'Sales This Month',
-                                leadingIcon: Icons.payments_outlined,
+                                title: 'Penjualan Bulan Ini',
+                                leadingIcon: Icons.calendar_month_outlined,
                                 value: Text(_fmtCurrency(s.data ?? 0)),
-                                sub: const Text('Compared to last period'),
+                                sub: const Text('vs. bulan lalu'),
                               ),
                             ),
                           ),
@@ -1002,10 +1025,10 @@ class _DashboardPageState extends State<DashboardPage> {
                             child: StreamBuilder<double>(
                               stream: salesLast7Days(),
                               builder: (_, s) => _metricCard(
-                                title: 'Sales Last 7 Days',
+                                title: 'Penjualan 7 Hari Terakhir',
                                 leadingIcon: Icons.trending_up,
                                 value: Text(_fmtCurrency(s.data ?? 0)),
-                                sub: const Text('Rolling 7 days'),
+                                sub: const Text('vs. 7 hari sebelumnya'),
                               ),
                             ),
                           ),
@@ -1014,10 +1037,10 @@ class _DashboardPageState extends State<DashboardPage> {
                             child: StreamBuilder<double>(
                               stream: averageOrderValue(),
                               builder: (_, s) => _metricCard(
-                                title: 'Average Order Value',
-                                leadingIcon: Icons.attach_money,
+                                title: 'Rata-rata Penjualan',
+                                leadingIcon: Icons.stacked_bar_chart,
                                 value: Text(_fmtCurrency(s.data ?? 0)),
-                                sub: const Text('Avg per completed order'),
+                                sub: const Text('Per pesanan'),
                               ),
                             ),
                           ),
@@ -1026,10 +1049,10 @@ class _DashboardPageState extends State<DashboardPage> {
                             child: StreamBuilder<int>(
                               stream: totalOrders(),
                               builder: (_, s) => _metricCard(
-                                title: 'Total Orders',
+                                title: 'Total Pesanan',
                                 leadingIcon: Icons.shopping_bag_outlined,
                                 value: Text('${s.data ?? 0}'),
-                                sub: const Text('All statuses'),
+                                sub: const Text('Semua status'),
                               ),
                             ),
                           ),
@@ -1038,10 +1061,10 @@ class _DashboardPageState extends State<DashboardPage> {
                             child: StreamBuilder<int>(
                               stream: visitors(),
                               builder: (_, s) => _metricCard(
-                                title: 'Users',
+                                title: 'Total Pengguna',
                                 leadingIcon: Icons.person_outline,
                                 value: Text('${s.data ?? 0}'),
-                                sub: const Text('Total unique users'),
+                                sub: const Text('Akun terdaftar'),
                               ),
                             ),
                           ),
@@ -1050,10 +1073,10 @@ class _DashboardPageState extends State<DashboardPage> {
                             child: StreamBuilder<double>(
                               stream: salesAllTime(),
                               builder: (_, s) => _metricCard(
-                                title: 'Total Sales All-Time',
-                                leadingIcon: Icons.stacked_bar_chart,
+                                title: 'Total Seluruh Penjualan',
+                                leadingIcon: Icons.payments_outlined,
                                 value: Text(_fmtCurrency(s.data ?? 0)),
-                                sub: const Text('Completed orders'),
+                                sub: const Text('Sejak awal toko dibuat'),
                               ),
                             ),
                           ),
@@ -1062,7 +1085,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             child: StreamBuilder<double>(
                               stream: pendingPaymentsTotal(),
                               builder: (_, s) => _metricCard(
-                                title: 'Pending Payments',
+                                title: 'Pembayaran Tertunda',
                                 leadingIcon: Icons.hourglass_bottom,
                                 value: Text(_fmtCurrency(s.data ?? 0)),
                                 sub: const Text('Menunggu Pembayaran'),
@@ -1081,20 +1104,23 @@ class _DashboardPageState extends State<DashboardPage> {
                     builder: (context, c) {
                       final wide = c.maxWidth > 980;
                       if (wide) {
-                        return SizedBox(
-                          height: 340,
-                          child: Row(
-                            children: [
-                              Expanded(flex: 2, child: weeklySalesCard()),
-                              const SizedBox(width: 16),
-                              Expanded(child: orderStatusPieCard()),
-                            ],
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: SizedBox(
+                            height: 340,
+                            child: Row(
+                              children: [
+                                Expanded(flex: 1, child: allTimeMonthlySalesCard()),
+                                const SizedBox(width: 16),
+                                Expanded(child: orderStatusPieCard()),
+                              ],
+                            ),
                           ),
                         );
                       } else {
                         return Column(
                           children: [
-                            weeklySalesCard(),
+                            allTimeMonthlySalesCard(),
                             const SizedBox(height: 16),
                             orderStatusPieCard(),
                           ],
@@ -1106,31 +1132,23 @@ class _DashboardPageState extends State<DashboardPage> {
                   const SizedBox(height: 24),
 
                   // ---- CHARTS ROW 2 ----
-                  LayoutBuilder(
-                    builder: (context, c) {
-                      final wide = c.maxWidth > 980;
-                      if (wide) {
-                        return SizedBox(
-                          height: 340,
-                          child: Row(
-                            children: [
-                              Expanded(flex: 2, child: monthlySalesCard()),
-                              const SizedBox(width: 16),
-                              Expanded(child: allTimeMonthlySalesCard()),
-                            ],
-                          ),
-                        );
-                      } else {
-                        return Column(
-                          children: [
-                            monthlySalesCard(),
-                            const SizedBox(height: 16),
-                            allTimeMonthlySalesCard(),
-                          ],
-                        );
-                      }
-                    },
-                  ),
+                  // Show full width row for weekly sales chart
+                  LayoutBuilder(builder: (context, c) {
+                    return SizedBox(
+                      height: 340,
+                      // child only weekly sales chart
+                      child: weeklySalesCard(),
+                    );
+                  }),
+                  const SizedBox(height: 24),
+                  // Show full width row for daily sales chart
+                  LayoutBuilder(builder: (context, c) {
+                    return SizedBox(
+                      height: 340,
+                      // child only daily sales chart
+                      child: dailySalesCard(),
+                    );
+                  }),
                 ],
               ),
             ),
