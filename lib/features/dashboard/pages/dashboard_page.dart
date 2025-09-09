@@ -612,11 +612,14 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.w700),
+          Container(
+            margin: const EdgeInsets.only(bottom: 16),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+              child: Text(
+                title,
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
             ),
           ),
           Expanded(
@@ -627,7 +630,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
+                  horizontal: 16,
                   vertical: 8,
                 ),
                 child: child,
@@ -701,7 +704,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 leftTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
-                    reservedSize: 52,
+                    reservedSize: 72,
                     getTitlesWidget: (v, _) {
                       if (v == 0) return const Text('0');
                       if (v >= 1000000) {
@@ -763,69 +766,87 @@ class _DashboardPageState extends State<DashboardPage> {
           final total = data.values.fold<int>(0, (a, b) => a + b);
           final keys = data.keys.toList();
 
-          final chart = PieChart(
-            PieChartData(
-              sectionsSpace: 2,
-              centerSpaceRadius: 48,
-              sections: List.generate(keys.length, (i) {
-                final key = keys[i];
-                final value = data[key]!;
-                final pct = total == 0 ? 0.0 : value / total;
-                return PieChartSectionData(
-                  value: value.toDouble(),
-                  title: '${(pct * 100).toStringAsFixed(0)}%',
-                  radius: 70,
-                  titleStyle: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
+          return Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Pie chart
+                Expanded(
+                  flex: 2,
+                  child: Center(
+                    child: PieChart(
+                      PieChartData(
+                        sectionsSpace: 2,
+                        centerSpaceRadius: 48,
+                        sections: List.generate(keys.length, (i) {
+                          final key = keys[i];
+                          final value = data[key]!;
+                          final pct = total == 0 ? 0.0 : value / total;
+                          return PieChartSectionData(
+                            value: value.toDouble(),
+                            title: '${(pct * 100).toStringAsFixed(0)}%',
+                            radius: 70,
+                            titleStyle: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                            color: Colors.primaries[i % Colors.primaries.length],
+                          );
+                        }),
+                      ),
+                    ),
                   ),
-                  color: Colors.primaries[i % Colors.primaries.length],
-                );
-              }),
+                ),
+                // Add some spacing
+                const SizedBox(width: 20),
+                // Legend
+                Flexible(
+                  flex: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 8),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(keys.length, (i) {
+                          final k = keys[i];
+                          final color = Colors.primaries[i % Colors.primaries.length];
+                          final count = data[k]!;
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Container(
+                                  width: 12,
+                                  height: 12,
+                                  decoration: BoxDecoration(
+                                    color: color,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(k, style: const TextStyle(fontSize: 13)),
+                                const SizedBox(width: 8),
+                                Text(
+                                  count.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          );
-
-          final legend = Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 16,
-            runSpacing: 8,
-            children: List.generate(keys.length, (i) {
-              final k = keys[i];
-              final color = Colors.primaries[i % Colors.primaries.length];
-              final count = data[k]!;
-              return Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: color,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(k, style: const TextStyle(fontSize: 13)),
-                  const SizedBox(width: 6),
-                  Text(
-                    count.toString(),
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              );
-            }),
-          );
-
-          return Column(
-            children: [
-              Expanded(child: chart),
-              const SizedBox(height: 8),
-              legend,
-            ],
           );
         },
       ),
@@ -896,7 +917,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 leftTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
-                    reservedSize: 52,
+                    reservedSize: 72,
                     getTitlesWidget: (value, _) {
                       if (value == 0) return const Text('0');
                       if (value >= 1000000) {
@@ -997,7 +1018,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 leftTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
-                    reservedSize: 52,
+                    reservedSize: 72,
                     getTitlesWidget: (value, _) {
                       if (value == 0) return const Text('0');
                       if (value >= 1000000) {
@@ -1161,16 +1182,29 @@ class _DashboardPageState extends State<DashboardPage> {
                   LayoutBuilder(
                     builder: (context, c) {
                       final wide = c.maxWidth > 980;
+                      const double chartRowHeight = 340;
                       if (wide) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: SizedBox(
-                            height: 340,
+                            height: chartRowHeight,
                             child: Row(
                               children: [
-                                Expanded(flex: 1, child: allTimeMonthlySalesCard()),
+                                Expanded(
+                                  flex: 1,
+                                  child: SizedBox(
+                                    height: chartRowHeight,
+                                    child: allTimeMonthlySalesCard(),
+                                  ),
+                                ),
                                 const SizedBox(width: 16),
-                                Expanded(child: orderStatusPieCard()),
+                                Expanded(
+                                  flex: 1,
+                                  child: SizedBox(
+                                    height: chartRowHeight,
+                                    child: orderStatusPieCard(),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -1178,9 +1212,9 @@ class _DashboardPageState extends State<DashboardPage> {
                       } else {
                         return Column(
                           children: [
-                            allTimeMonthlySalesCard(),
+                            SizedBox(height: chartRowHeight, child: allTimeMonthlySalesCard()),
                             const SizedBox(height: 16),
-                            orderStatusPieCard(),
+                            SizedBox(height: chartRowHeight, child: orderStatusPieCard()),
                           ],
                         );
                       }
